@@ -1,0 +1,65 @@
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# ── Environment & secrets ────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Node / Frontend ──────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+*.local
+
+# ── ML Models (large binary files) ──────────────────────────────────────────
+*.pt
+*.pth
+*.onnx
+*.weights
+*.h5
+
+# ── YOLO training runs ───────────────────────────────────────────────────────
+backend/models/run/
+runs/
+
+# ── Datasets & raw images ────────────────────────────────────────────────────
+Women-Safety/
+backend/dataset/
+*.zip
+
+# ── Uploaded / temp files ────────────────────────────────────────────────────
+backend/uploads/
+backend/input/
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs ─────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
