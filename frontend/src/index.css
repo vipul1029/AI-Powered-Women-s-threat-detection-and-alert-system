@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Theme tokens ────────────────────────────────────────────────────────── */
+/*
+   --surface-*  Space-separated RGB channels (required by Tailwind's
+                rgb(var(--x) / <alpha-value>) pattern so opacity modifiers
+                like bg-dark-800/40 work correctly).
+
+   --tx-*       Hex values are fine here because text/border-gray classes
+                never use opacity modifiers in this codebase.
+*/
+
+/* Dark mode — default (no class on <html>) */
+:root {
+  --surface-900: 10 10 15;     /* #0a0a0f */
+  --surface-800: 18 18 26;     /* #12121a */
+  --surface-700: 26 26 38;     /* #1a1a26 */
+  --surface-600: 34 34 58;     /* #22223a */
+  --surface-500: 46 46 74;     /* #2e2e4a */
+
+  --tx-100: #f3f4f6;
+  --tx-200: #e5e7eb;
+  --tx-300: #d1d5db;
+  --tx-400: #9ca3af;
+  --tx-500: #6b7280;
+  --tx-600: #4b5563;
+  --tx-700: #374151;
+  --tx-800: #1f2937;
+  --tx-900: #111827;
+}
+
+/* Light mode — toggled by adding class="light" to <html> */
+html.light {
+  --surface-900: 240 244 248;  /* #f0f4f8 */
+  --surface-800: 255 255 255;  /* #ffffff */
+  --surface-700: 237 240 244;  /* #edf0f4 */
+  --surface-600: 221 227 234;  /* #dde3ea */
+  --surface-500: 200 208 218;  /* #c8d0da */
+
+  /* Grays inverted so text reads dark on light surfaces */
+  --tx-100: #0f172a;
+  --tx-200: #1e293b;
+  --tx-300: #334155;
+  --tx-400: #475569;
+  --tx-500: #64748b;
+  --tx-600: #94a3b8;
+  --tx-700: #cbd5e1;
+  --tx-800: #e2e8f0;
+  --tx-900: #f1f5f9;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    transition: background-color 0.2s ease;
+  }
+
+  body {
+    @apply bg-dark-900 text-gray-100 font-sans antialiased;
+    transition: background-color 0.2s ease, color 0.15s ease;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-dark-800; }
+  ::-webkit-scrollbar-thumb { @apply bg-dark-500 rounded-full; }
+}
+
+@layer utilities {
+  .severity-safe     { @apply text-threat-safe border-threat-safe; }
+  .severity-low      { @apply text-threat-low border-threat-low; }
+  .severity-medium   { @apply text-threat-medium border-threat-medium; }
+  .severity-high     { @apply text-threat-high border-threat-high; }
+  .severity-critical { @apply text-threat-critical border-threat-critical; }
+}
+
+/* ─── Premium Floating Navbar ────────────────────────────────────────────── */
+
+/*
+  Violet → Purple → Cyan animated border shimmer.
+  300% wide so the gradient sweeps across visibly.
+*/
+.navbar-shell {
+  background: linear-gradient(
+    100deg,
+    rgba(139,  92, 246, 0.90) 0%,
+    rgba(109,  40, 217, 0.60) 18%,
+    rgba( 34, 211, 238, 0.40) 35%,
+    rgba( 10,  10,  20, 0.08) 50%,
+    rgba( 34, 211, 238, 0.40) 65%,
+    rgba(109,  40, 217, 0.60) 82%,
+    rgba(139,  92, 246, 0.90) 100%
+  );
+  background-size: 300% 100%;
+  animation: nav-shimmer 5s ease-in-out infinite;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.07),
+    0 8px 44px  rgba(0,   0,   0,   0.70),
+    0 2px 10px  rgba(0,   0,   0,   0.45),
+    0 0  90px   rgba(139, 92, 246,  0.20),
+    0 0  40px   rgba(34,  211, 238, 0.08);
+}
+
+@keyframes nav-shimmer {
+  0%, 100% { background-position: 0%   center; }
+  50%       { background-position: 100% center; }
+}
+
+html.light .navbar-shell {
+  background: linear-gradient(
+    100deg,
+    rgba(124,  58, 237, 0.85) 0%,
+    rgba(139,  92, 246, 0.55) 20%,
+    rgba( 34, 211, 238, 0.45) 38%,
+    rgba(220, 210, 255, 0.30) 50%,
+    rgba( 34, 211, 238, 0.45) 62%,
+    rgba(139,  92, 246, 0.55) 80%,
+    rgba(124,  58, 237, 0.85) 100%
+  );
+  background-size: 300% 100%;
+  box-shadow:
+    0 6px 32px rgba(109, 40, 217, 0.18),
+    0 2px  8px rgba(109, 40, 217, 0.10),
+    0 0   60px rgba(139, 92, 246, 0.14),
+    0 0   24px rgba( 34,211, 238, 0.07);
+}
+
+/* SVG fractal-noise grain — subtle material texture on the glass */
+.navbar-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.030;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+html.light .navbar-noise { opacity: 0.018; }
+
+/* Brand name — violet → cyan gradient text */
+.navbar-brand {
+  background: linear-gradient(120deg, #c4b5fd 0%, #a78bfa 35%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+html.light .navbar-brand {
+  background: linear-gradient(120deg, #6d28d9 0%, #7c3aed 45%, #0891b2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pulsing halo behind logo icon */
+@keyframes logo-pulse {
+  0%, 100% { opacity: 0.30; transform: translateY(-50%) scale(1.05); }
+  50%       { opacity: 0.65; transform: translateY(-50%) scale(1.45); }
+}
+.navbar-logo-glow { animation: logo-pulse 3s ease-in-out infinite; }
+
+/* ─── Landing Page ────────────────────────────────────────────────────────── */
+
+.gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hero background — must use rgb() wrapper because CSS variable is RGB channels */
+.hero-gradient {
+  background-color: rgb(var(--surface-900));
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(37, 99, 235, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 40%, rgba(99, 102, 241, 0.10) 0%, transparent 70%);
+  transition: background-color 0.2s ease;
+}
+
+/* Grid overlay */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* In light mode use dark lines instead of white lines */
+html.light .hero-grid {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+/* Scan line */
+.scan-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(37, 99, 235, 0.35) 40%,
+    rgba(37, 99, 235, 0.6) 50%,
+    rgba(37, 99, 235, 0.35) 60%,
+    transparent 100%);
+  animation: scan-move 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan-move {
+  0%   { top: 0%;   opacity: 0.8; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.card-scan-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.5), transparent);
+  animation: scan-move 3s linear infinite;
+  pointer-events: none;
+}
+
+.float-orb      { animation: float-anim 7s ease-in-out infinite; }
+.float-orb-slow { animation: float-anim 10s ease-in-out infinite reverse; }
+
+@keyframes float-anim {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-22px) scale(1.04); }
+}
+
+/* ─── Severity badge classes (theme-aware) ────────────────────────────────── */
+/*
+   Used by DetectionList and AlertCard. Each class sets background, text,
+   and border so both dark and light modes look correct.
+   Always pair with Tailwind's "border" class for the border to show.
+*/
+
+:root {
+  --badge-safe-bg:      rgba(20, 83, 45, 0.4);
+  --badge-safe-text:    #86efac;
+  --badge-safe-border:  #15803d;
+
+  --badge-low-bg:       rgba(113, 63, 18, 0.5);
+  --badge-low-text:     #fde047;
+  --badge-low-border:   #a16207;
+
+  --badge-med-bg:       rgba(124, 45, 18, 0.5);
+  --badge-med-text:     #fdba74;
+  --badge-med-border:   #c2410c;
+
+  --badge-high-bg:      rgba(127, 29, 29, 0.5);
+  --badge-high-text:    #fca5a5;
+  --badge-high-border:  #b91c1c;
+
+  --badge-crit-bg:      rgba(69, 10, 10, 0.7);
+  --badge-crit-text:    #fecaca;
+  --badge-crit-border:  #dc2626;
+}
+
+html.light {
+  --badge-safe-bg:      rgba(220, 252, 231, 0.85);
+  --badge-safe-text:    #14532d;
+  --badge-safe-border:  #16a34a;
+
+  --badge-low-bg:       rgba(254, 249, 195, 0.85);
+  --badge-low-text:     #713f12;
+  --badge-low-border:   #ca8a04;
+
+  --badge-med-bg:       rgba(255, 237, 213, 0.85);
+  --badge-med-text:     #7c2d12;
+  --badge-med-border:   #ea580c;
+
+  --badge-high-bg:      rgba(254, 226, 226, 0.85);
+  --badge-high-text:    #7f1d1d;
+  --badge-high-border:  #dc2626;
+
+  --badge-crit-bg:      rgba(255, 228, 230, 0.85);
+  --badge-crit-text:    #881337;
+  --badge-crit-border:  #e11d48;
+}
+
+.badge-safe     { background-color: var(--badge-safe-bg);  color: var(--badge-safe-text);  border-color: var(--badge-safe-border); }
+.badge-low      { background-color: var(--badge-low-bg);   color: var(--badge-low-text);   border-color: var(--badge-low-border); }
+.badge-medium   { background-color: var(--badge-med-bg);   color: var(--badge-med-text);   border-color: var(--badge-med-border); }
+.badge-high     { background-color: var(--badge-high-bg);  color: var(--badge-high-text);  border-color: var(--badge-high-border); }
+.badge-critical { background-color: var(--badge-crit-bg);  color: var(--badge-crit-text);  border-color: var(--badge-crit-border); }
