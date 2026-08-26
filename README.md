@@ -1,6 +1,6 @@
 # SafeAura — Women Threat Detection System
 
-**SIH Final Year Project** | Real-time AI-powered threat detection for women's safety via CCTV, webcam, and video surveillance.
+**Final Year Project** | Real-time AI-powered threat detection for women's safety via CCTV, webcam, and video surveillance.
 
 ---
 
